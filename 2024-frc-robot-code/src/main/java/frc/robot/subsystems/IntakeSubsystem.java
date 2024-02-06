@@ -4,11 +4,16 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+// look at https://docs.ctr-electronics.com/archive.html, should be here eventually
+// motorcontrol was changed, see https://docs.ctr-electronics.com
+// drive uses edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+// its getting later than i want tho so ill look at it another time
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// deal with later
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
