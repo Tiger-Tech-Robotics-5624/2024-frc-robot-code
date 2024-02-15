@@ -11,17 +11,17 @@ public class AutonomousSubsystem {
   DriveSubsystem driveSub;
   IntakeSubsystem intakeSub;
   VisionSubsystem visionSub;
-  ElevatorSubsystem elevatorSub;
+  HangerSubsystem hangerSub;
   Timer timer; 
 
   
   boolean teleop = false;
 
   /** Creates a new AutonomousSubsystem. */
-  public AutonomousSubsystem(DriveSubsystem drive, IntakeSubsystem intake, ElevatorSubsystem elevator) {
+  public AutonomousSubsystem(DriveSubsystem drive, IntakeSubsystem intake,HangerSubsystem hanger) {
     driveSub = drive;
     intakeSub = intake;
-    elevatorSub = elevator;
+   hangerSub = hanger;
     visionSub = new VisionSubsystem();
     timer = new Timer();
   }
@@ -35,7 +35,7 @@ public class AutonomousSubsystem {
     teleop = false;
     timer.start();
     driveSub.resetGyro();
-    elevatorSub.zeroEncoder();
+   hangerSub.zeroEncoder();
     intakeSub.zeroEncoder();
   }
 
@@ -43,7 +43,7 @@ public class AutonomousSubsystem {
     teleop = true;
     intakeSub.stop();
     intakeSub.stopLower();
-    elevatorSub.stop();
+   hangerSub.stop();
     driveSub.stop();
   }
   
@@ -57,13 +57,13 @@ public class AutonomousSubsystem {
     //Autonomous
     while(timer.get() < 15 && !teleop) {
       if(timer.get() > 0 && timer.get() < 1){
-        elevatorSub.autoMove(-0.35);
+       hangerSub.autoMove(-0.35);
       }
       else if(timer.get() > 6 && timer.get() < 7) {
-        elevatorSub.autoMove(0.35);
+       hangerSub.autoMove(0.35);
       }
       else { 
-        elevatorSub.stop();
+       hangerSub.stop();
       }
 
 

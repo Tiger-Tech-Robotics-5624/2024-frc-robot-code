@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class HangerSubsystem extends SubsystemBase {
   private CANSparkMax neo;
   private RelativeEncoder e_encoder;
-  /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem() {
+  /** Creates a newHangerSubsystem. */
+  public HangerSubsystem() {
     neo = new CANSparkMax(Constants.CANPortElevator, MotorType.kBrushless);
     e_encoder = neo.getEncoder();
   }

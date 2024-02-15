@@ -4,8 +4,16 @@
 
 package frc.robot.subsystems;
 
-//import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.signals.ControlModeValue;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreTalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
+// import com.ctre.phoenix6.motorcontrol.TalonSRXControlMode;
+// import com.ctre.phoenix6.motorcontrol.can.TalonSRX;
 // look at https://docs.ctr-electronics.com/archive.html, should be here eventually
 // motorcontrol was changed, see https://docs.ctr-electronics.com
 // drive uses edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -26,7 +34,7 @@ import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
   //Initilize Motors Here
-  private TalonSRX talon;
+  private TalonFX talon;
   private CANSparkMax spark;
   private RelativeEncoder s_encoder;
 
@@ -45,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     //Define Motors Here
-    talon = new TalonSRX(Constants.TalonPort1); //INTAKE
+    talon = new TalonFX(Constants.TalonPort1); //INTAKE
     spark = new CANSparkMax(Constants.SparkPort1, MotorType.kBrushless); //ELBOW
     s_encoder = spark.getEncoder();
 
@@ -96,12 +104,16 @@ public class IntakeSubsystem extends SubsystemBase {
     spark.set(PIDSpeed);
   }
 
+
+  //NOTE: VALUES HERE MIGHT BE REALLY F*CKED UP
   public void pullPushIntake(double leftTAxis,double rightTAxis) {
     if(leftTAxis > 0.03 && rightTAxis <= 0.03) {
-      talon.set(TalonSRXControlMode.PercentOutput,-leftTAxis * .50); //Push
+      //https://api.ctr-electronics.com/phoenix6/release/java/com/ctre/phoenix6/StatusCode.html#ControlModeNotSupportedYet
+      // talon.set(PositionDutyCycle.set(-leftTAxis * .50)); #uncomment this
+      //talon.set(TalonSRXControlMode.PercentOutput,-leftTAxis * .50); //Push
     }
     else if(rightTAxis > 0.03 && leftTAxis <= 0.03){
-      talon.set(TalonSRXControlMode.PercentOutput,rightTAxis * .50); //Pull
+      //talon.set(TalonSRXControlMode.PercentOutput,rightTAxis * .50); //Pull
     }
     else {
       stop();
@@ -110,24 +122,24 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void place(boolean buttonA) {
     if(buttonA) {
-      talon.set(TalonSRXControlMode.PercentOutput, -0.15);
+      //talon.set(TalonSRXControlMode.PercentOutput, -0.15);
     }
   }
 
   public void shoot (boolean buttonB) {
     if(buttonB) {
-      talon.set(TalonSRXControlMode.PercentOutput, -0.35);
+      //talon.set(TalonSRXControlMode.PercentOutput, -0.35);
     }
   }
 
   public void slowIn(boolean rBumper) {
     if(rBumper) {
-      talon.set(TalonSRXControlMode.PercentOutput, 0.15);
+      //talon.set(TalonSRXControlMode.PercentOutput, 0.15);
     }
   }
 
   public void stop() {
-    talon.set(TalonSRXControlMode.PercentOutput,0);
+    //talon.set(TalonSRXControlMode.PercentOutput,0);
   }
 
   public void lower(double yAxis,boolean rBumper) {

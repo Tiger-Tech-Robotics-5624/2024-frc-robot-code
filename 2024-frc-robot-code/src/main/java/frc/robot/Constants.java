@@ -37,7 +37,7 @@ public final class Constants {
   public static final double kD = 0;
   public static final double kEncoder2Feet = 7.3;
   
-  /* Elevator */
+  /*Hanger */
   public static final int CANPortElevator = 8; //Spark
 
   /* Intake */

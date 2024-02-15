@@ -6,11 +6,11 @@ package frc.robot;
 
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.HangerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.HangerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,12 +25,12 @@ public class RobotContainer {
 
   DriveSubsystem driveSub;
   IntakeSubsystem intakeSub;
-  ElevatorSubsystem elevatorSub;
+  HangerSubsystem hangerSub;
   AutonomousSubsystem autoSub;
 
   DriveCommand driveCmd;
   IntakeCommand intakeCmd;
-  ElevatorCommand elevatorCmd;
+  HangerCommand hangerCmd;
   AutonomousCommand autoCmd;
 
   ShuffleChooser chooser;
@@ -43,19 +43,19 @@ public class RobotContainer {
 
     driveSub = new DriveSubsystem();
     intakeSub = new IntakeSubsystem();
-    elevatorSub = new ElevatorSubsystem();
-    autoSub = new AutonomousSubsystem(driveSub,intakeSub,elevatorSub);
+    hangerSub = new HangerSubsystem();
+    autoSub = new AutonomousSubsystem(driveSub,intakeSub,hangerSub);
 
     chooser = new ShuffleChooser();
     shuffleInfo();
 
     driveCmd = new DriveCommand(driveSub);
     intakeCmd = new IntakeCommand(intakeSub);
-    elevatorCmd = new ElevatorCommand(elevatorSub);
+    hangerCmd = new HangerCommand(hangerSub);
     
     driveSub.setDefaultCommand(driveCmd);
     intakeSub.setDefaultCommand(intakeCmd);
-    elevatorSub.setDefaultCommand(elevatorCmd);
+    hangerSub.setDefaultCommand(hangerCmd);
   }
 
   private void configureBindings() {}
