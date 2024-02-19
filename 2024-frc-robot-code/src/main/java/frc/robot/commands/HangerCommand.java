@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.HangerSubsystem;
 
-public class ElevatorCommand extends Command {
-  ElevatorSubsystem elevatorSub;
-  /** Creates a new ElevatorCommand. */
-  public ElevatorCommand(ElevatorSubsystem elevator) {
+public class HangerCommand extends Command {
+  HangerSubsystem hangerSub;
+  /** Creates a newHangerCommand. */
+  public HangerCommand(HangerSubsystem hanger) {
     // Use addRequirements() here to declare subsystem dependencies.
-    elevatorSub = elevator;
-    addRequirements(elevatorSub);
+    hangerSub = hanger;
+    addRequirements(hangerSub);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class ElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSub.verticalMove(RobotContainer.xboxController.getRightY());
+   hangerSub.verticalMove(RobotContainer.xboxController.getRightY());
   }
 
   // Called once the command ends or is interrupted.
