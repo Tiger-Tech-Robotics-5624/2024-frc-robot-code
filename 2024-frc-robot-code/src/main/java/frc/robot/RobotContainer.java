@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.HangerCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.AutonomousSubsystem;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HangerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,15 +20,10 @@ public class RobotContainer {
   public static Joystick stickLeft, stickRight;
 
   DriveSubsystem driveSub;
-  IntakeSubsystem intakeSub;
-  HangerSubsystem hangerSub;
-  AutonomousSubsystem autoSub;
+  ShootSubsystem shootSub;
 
   DriveCommand driveCmd;
-  IntakeCommand intakeCmd;
-  HangerCommand hangerCmd;
-  AutonomousCommand autoCmd;
-
+  ShootCommand shootCmd;
   ShuffleChooser chooser;
 
   public RobotContainer() {
@@ -42,28 +33,21 @@ public class RobotContainer {
     stickRight = new Joystick(Constants.stickPortR);
 
     driveSub = new DriveSubsystem();
-    intakeSub = new IntakeSubsystem();
-    hangerSub = new HangerSubsystem();
-    autoSub = new AutonomousSubsystem(driveSub,intakeSub,hangerSub);
+    shootSub = new ShootSubsystem();
+    
 
     chooser = new ShuffleChooser();
     shuffleInfo();
 
     driveCmd = new DriveCommand(driveSub);
-    intakeCmd = new IntakeCommand(intakeSub);
-    hangerCmd = new HangerCommand(hangerSub);
+    shootCmd = new ShootCommand(shootSub);
     
     driveSub.setDefaultCommand(driveCmd);
-    intakeSub.setDefaultCommand(intakeCmd);
-    hangerSub.setDefaultCommand(hangerCmd);
+    shootSub.setDefaultCommand(shootCmd);
   }
 
   private void configureBindings() {}
 
-  public Command getAutonomousCommand() {
-    // return new AutonomousCommand(autoSub, false, "CUBE");
-    return new AutonomousCommand(autoSub, chooser.getStartLocation().getSelected(), chooser.getStartItem().getSelected());
-  }
 
   public void shuffleInfo() {
     SmartDashboard.putData(this.chooser.getStartItem());

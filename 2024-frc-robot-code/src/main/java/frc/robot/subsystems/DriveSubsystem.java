@@ -5,10 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 //Idle changed recently, idr what it is now but its in frc patches
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -33,11 +32,7 @@ public class DriveSubsystem extends SubsystemBase {
   private CANSparkMax motorL1; //ID 1
   private CANSparkMax motorL2; //ID 3
 
-  private RelativeEncoder encoderR1;
-  private RelativeEncoder encoderR2;
 
-  private RelativeEncoder encoderL1;
-  private RelativeEncoder encoderL2;
 
   private MotorControllerGroup rightGroup;
   private MotorControllerGroup leftGroup;
@@ -64,10 +59,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
 
     motorR1 = new CANSparkMax(Constants.CANPortR1, MotorType.kBrushless);
-    motorR2 = new CANSparkMax(Constants.CANPortR2, MotorType.kBrushless);
+    // motorR2 = new CANSparkMax(Constants.CANPortR2, MotorType.kBrushless);
 
     motorL1 = new CANSparkMax(Constants.CANPortL1, MotorType.kBrushless);
-    motorL2 = new CANSparkMax(Constants.CANPortL2, MotorType.kBrushless);
+    // motorL2 = new CANSparkMax(Constants.CANPortL2, MotorType.kBrushless);
 
     rightGroup = new MotorControllerGroup(motorR1, motorR2);
     leftGroup = new MotorControllerGroup(motorL1, motorL2);
@@ -78,10 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
     //Range of Integral values
     PID.setIntegratorRange(-0.5, 0.5);
 
-    encoderR1 = motorR1.getEncoder();
-    encoderR2 = motorR2.getEncoder();
-    encoderL1 = motorL1.getEncoder();
-    encoderL2 = motorL2.getEncoder();
+   
     
     // tab = Shuffleboard.getTab("PID Testing");
     // kPEntry = tab.addPersistent("kP", 0).getEntry();
@@ -125,8 +117,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(double leftY, double rightY, double analogRead) 
   {
     if(rightY > 0.05 || rightY < -0.05 || leftY > 0.05 || leftY < -0.05){
-      rightGroup.set(0.85 * (rightY * (0.50 - (0.25 * analogRead))) );
-      leftGroup.set(0.85 * (-leftY * (0.50 - (0.25 * analogRead))) ); 
+      motorR1.set(0.85 * (rightY * (0.50 - (0.25 * analogRead))) );
+      motorR2.set(0.85 * (rightY * (0.50 - (0.25 * analogRead))) );
+      motorL1.set(0.85 * (-leftY * (0.50 - (0.25 * analogRead))) ); 
+      motorL2.set(0.85 * (-leftY * (0.50 - (0.25 * analogRead))) );
     }
     else{
       stop();
@@ -167,38 +161,29 @@ public class DriveSubsystem extends SubsystemBase {
     // value = drivePID.calculate(error);
     value = error * 0.1;
     if(value > 0.25) {
-      leftGroup.set(0.05);
-      rightGroup.set(0.05);
+      motorL1.set(0.05);
+      motorL2.set(0.05);
+      motorR1.set(0.05);
+      motorR2.set(0.05);
     }
 
     else if(value < -0.25) {
-      rightGroup.set(-0.05);
-      leftGroup.set(-0.05);
+      motorR1.set(-0.05);
+      motorR2.set(-0.05);
+      motorL1.set(-0.05);
+      motorL2.set(-0.05);
     }
     else {
-      rightGroup.set(speed);
-      leftGroup.set(-speed);
+      motorR1.set(speed);
+      motorR2.set(speed);
+      motorL1.set(-speed);
+      motorL2.set(-speed);
     }
   }
 
-  //AutoBalance
-  public double getAverageEncoder() {
-    return (Math.abs(encoderR1.getPosition()) + Math.abs(encoderR2.getPosition()) + Math.abs(encoderL1.getPosition()) + Math.abs(encoderL2.getPosition())) / 4;
-  }
 
-  public void autoBalance(){
-    if(gyro.getRoll()+4 > 10){
-      rightGroup.set(-0.1);
-      leftGroup.set(0.1);
-    }
-    else if(gyro.getRoll()+4 < -10){
-      rightGroup.set(0.1);
-      leftGroup.set(-0.1);
-    }
-    else if(getAverageEncoder()/Constants.kEncoder2Feet > 5.5 && getAverageEncoder()/Constants.kEncoder2Feet < 6.5 && gyro.getRoll() < 10 && gyro.getRoll() > -10) {
-      stop();
-    }
-  }
+
+
 
   @Override
   public void periodic() {
@@ -210,14 +195,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void stop(){
-    rightGroup.set(0);
-    leftGroup.set(0);
+    motorR1.set(0);
+    motorR2.set(0);
+    motorL1.set(0);
+    motorL2.set(0);
   }
 
-  public void zeroEncoder() {
-    encoderR1.setPosition(0);
-    encoderR2.setPosition(0);
-    encoderL1.setPosition(0);
-    encoderL2.setPosition(0);
-  }
+
 }
