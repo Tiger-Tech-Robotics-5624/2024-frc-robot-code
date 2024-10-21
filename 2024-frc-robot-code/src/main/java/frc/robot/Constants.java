@@ -32,6 +32,9 @@ public final class Constants {
   public static final int CANPortR1 = 2; 
   public static final int CANPortR2 = 4; 
 
+    public static final int CANPortHang1 = 6; 
+
+
   public static final double kP = 0;
   public static final double kI = 0;
   public static final double kD = 0;

@@ -37,6 +37,7 @@ public class ShootSubsystem extends SubsystemBase {
   private CANSparkMax shooter1;
   private CANSparkMax shooter2;
 
+  private CANSparkMax hanger;
   ShuffleboardTab tab;
   GenericEntry kPEntry;
   GenericEntry kIEntry;
@@ -56,6 +57,7 @@ public class ShootSubsystem extends SubsystemBase {
     // talon = new TalonFX(Constants.TalonPort1); //INTAKE
     shooter1 = new CANSparkMax(Constants.CANPortShoot1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(Constants.CANPortShoot2, MotorType.kBrushless);
+    // hanger = new CANSparkMax(Constants.CANPortHang1, MotorType.kBrushed);
     // s_encoder = spark.getEncoder();
 
     
@@ -115,11 +117,23 @@ public class ShootSubsystem extends SubsystemBase {
     else if(rightTAxis > 0.03 && leftTAxis <= 0.03){
       //talon.set(TalonSRXControlMode.PercentOutput,rightTAxis * .50); //Pull
     }
-    else {
-      stop();
-    }
+ 
   }
+  public void hangOut(boolean buttonX)
+  {
+      if (buttonX)
+      {
+        hanger.set(-0.25);
+      }
+  }
+  public void hangIn(boolean buttonY)
+  {
+      if (buttonY)
+      {
+          hanger.set(0.25);
+      }
 
+  }
   public void setSpeed(boolean buttonRT)
   {
     if (buttonRT)
@@ -127,47 +141,40 @@ public class ShootSubsystem extends SubsystemBase {
       speed = !speed;
     }
   }
-  public void place(boolean buttonA) {
-    if(buttonA) {
-      //talon.set(TalonSRXControlMode.PercentOutput, -0.15);
-    }
+  public void autoShoot() {
+      shooter1.set(1);
+      shooter2.set(-1);
+
   }
 
-  public void shoot (boolean buttonLB) {
+  public void shooter (boolean buttonLB, boolean buttonRB) {
     if(buttonLB) {
-      if (speed)
-      {
+
         
-        shooter1.set(0.45);
-        shooter2.set(0.45);
-        
-      }
-      else
-      {
-        shooter1.set(0.25);
-        shooter2.set(0.25);
-      }
-      
+        shooter1.set(-0.3);
+        shooter2.set(0.3);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                      
       //talon.set(TalonSRXControlMode.PercentOutput, -0.35);
     }
+    else if(buttonRB) {
+        shooter1.set(1);
+        shooter2.set(-1);
+      //talon.set(TalonSRXControlMode.PercentOutput, -0.35);
+    }  
+    else 
+    {
+      shooter1.set(0);
+      shooter2.set(0);
+    }
+    
   }
 
-    public void reverse (boolean buttonRB) {
+    public void shoot (boolean buttonRB) {
     if(buttonRB) {
-      if (speed)
-      {
-        shooter1.set(-0.45);
-        shooter2.set(-0.45);
-      }
-      else
-      {
-        shooter1.set(-0.25);
-        shooter2.set(-0.25);
-      }
-      
+        shooter1.set(1);
+        shooter2.set(-1);
       //talon.set(TalonSRXControlMode.PercentOutput, -0.35);
-    }
-  }
+    }  }
 
   public void slowIn(boolean rBumper) {
     if(rBumper) {
@@ -175,10 +182,10 @@ public class ShootSubsystem extends SubsystemBase {
     }
   }
 
+
   public void stop() {
     shooter1.set(0);
-    shooter1.set(0);
-    //talon.set(TalonSRXControlMode.PercentOutput,0);
+    shooter2.set(0);
   }
 
   // public void lower(double yAxis,boolean rBumper) {

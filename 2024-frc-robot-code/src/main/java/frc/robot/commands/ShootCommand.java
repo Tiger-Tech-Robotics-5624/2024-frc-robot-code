@@ -26,14 +26,11 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // intakeSub.pullPushIntake(RobotContainer.xboxController.getLeftTriggerAxis(),RobotContainer.xboxController.getRightTriggerAxis());
-    // intakeSub.lower(-RobotConta0iner.xboxController.getLeftY(),false);
-    shootSub.setSpeed(RobotContainer.xboxController.getXButton());
-    shootSub.shoot(RobotContainer.xboxController.getLeftBumper());
-    shootSub.reverse(RobotContainer.xboxController.getRightBumper());
-    // shootSub.slowIn(RobotContainer.xboxController.getRightBumper());
-    // intakeSub.pidTest();
-    // intakeSub.pidTestStart(RobotContainer.xboxController.getXButton(), RobotContainer.xboxController.getYButton());
+    // shootSub.hangOut(RobotContainer.xboxController.getXButton());
+    // shootSub.reverse(RobotContainer.xboxController.getLeftBumper());
+    shootSub.shooter(RobotContainer.xboxController.getLeftBumper(),RobotContainer.xboxController.getRightBumper());
+    // shootSub.hangIn(RobotContainer.xboxController.getYButton());
+    
 
   }
 

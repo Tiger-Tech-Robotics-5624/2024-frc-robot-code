@@ -19,8 +19,8 @@ public class RobotContainer {
   public static XboxController xboxController;
   public static Joystick stickLeft, stickRight;
 
-  DriveSubsystem driveSub;
-  ShootSubsystem shootSub;
+  static DriveSubsystem driveSub;
+  static ShootSubsystem shootSub;
 
   DriveCommand driveCmd;
   ShootCommand shootCmd;
@@ -50,7 +50,5 @@ public class RobotContainer {
 
 
   public void shuffleInfo() {
-    SmartDashboard.putData(this.chooser.getStartItem());
-    SmartDashboard.putData(this.chooser.getStartLocation());
   }
 }
