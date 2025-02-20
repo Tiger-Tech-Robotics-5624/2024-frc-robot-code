@@ -5,22 +5,25 @@
 package frc.robot;
 
 import java.util.Map;
-
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoProperty;
-import edu.wpi.first.cscore.VideoMode.PixelFormat;
+//import edu.wpi.first.cscore.VideoMode.PixelFormat;
+// https://docs.wpilib.org/en/stable/docs/software/vision-processing/introduction/cameraserver-class.html might help
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.AutonomousSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,11 +35,16 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private UsbCamera camera;
   private RobotContainer m_robotContainer;
-  private AprilTagDetector detector;
+  private static final String kDefaultAuto = "Default";
+  private static final String kShootAuto = "Shoot";
 
-  private ShuffleboardLayout cameraCommands;
-  private GenericEntry exposure;
-  private GenericEntry update;
+
+  
+  private long end;
+  private String m_autoSelected;
+  private SendableChooser<String> m_chooser =  new SendableChooser<>();
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -46,25 +54,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+ 
 
-    cameraCommands = Shuffleboard.getTab("Camera stuff").getLayout("Exposure", BuiltInLayouts.kList).withSize(1,2).withProperties(Map.of("Label position","HIDDEN"));
-    exposure = cameraCommands.add("Exposure Value", 50).getEntry();
-    update = cameraCommands.add("Update",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-
-
-    camera = CameraServer.startAutomaticCapture();
-    camera.setVideoMode(PixelFormat.kMJPEG, 500, 500, 15);
-    camera.setExposureManual(75);
-    //sets Autofocus to off
-    // VideoProperty autofocus = camera.getProperty("focus_auto");
-    // autofocus.set(0);
-    //sets focus to 10, (goes 0-250, 0 being far, 250 being close)
-    // VideoProperty focus = camera.getProperty("focus_Absolute");
-    // focus.set(10);
-    
-    camera.setBrightness(15);
-
-    //April tag identifier
+    m_chooser.setDefaultOption("Default", kDefaultAuto);
+    m_chooser.addOption("Shoot", kShootAuto);
+    SmartDashboard.putData("Auto choices",m_chooser);
     
     
   }
@@ -84,11 +78,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     
-    if(update.getBoolean(false)) {
-      camera.setExposureManual((int) exposure.getDouble(2));
-      update.setBoolean(false);
     }
-  }
+  
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -98,19 +89,43 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+
   @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  public void autonomousInit()
+  {
+    long start = System.currentTimeMillis();
+    end = start + 4*1125;
+     m_autoSelected = m_chooser.getSelected();
+     System.out.println(m_autoSelected);
+    /*
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+      if (m_autonomousCommand != null)
+      {
+        m_autonomousCommand.schedule();
+      }
+    */
   }
-
+  // }
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    while (System.currentTimeMillis() < end)
+    {
+      switch (m_autoSelected) {
+            case kShootAuto:        
+              RobotContainer.shootSub.autoShoot();              
+              break;
+            case kDefaultAuto:
+              RobotContainer.driveSub.driveAuto();
+              break;
+            default:              
+              RobotContainer.driveSub.driveAuto();
+              break;
+      }
+    }
+
   }
+
 
   @Override
   public void teleopInit() {
@@ -126,6 +141,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {}
+
 
   @Override
   public void testInit() {

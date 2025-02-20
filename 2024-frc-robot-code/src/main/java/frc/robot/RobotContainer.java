@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.AutonomousSubsystem;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,16 +19,11 @@ public class RobotContainer {
   public static XboxController xboxController;
   public static Joystick stickLeft, stickRight;
 
-  DriveSubsystem driveSub;
-  IntakeSubsystem intakeSub;
-  ElevatorSubsystem elevatorSub;
-  AutonomousSubsystem autoSub;
+  static DriveSubsystem driveSub;
+  static ShootSubsystem shootSub;
 
   DriveCommand driveCmd;
-  IntakeCommand intakeCmd;
-  ElevatorCommand elevatorCmd;
-  AutonomousCommand autoCmd;
-
+  ShootCommand shootCmd;
   ShuffleChooser chooser;
 
   public RobotContainer() {
@@ -42,31 +33,22 @@ public class RobotContainer {
     stickRight = new Joystick(Constants.stickPortR);
 
     driveSub = new DriveSubsystem();
-    intakeSub = new IntakeSubsystem();
-    elevatorSub = new ElevatorSubsystem();
-    autoSub = new AutonomousSubsystem(driveSub,intakeSub,elevatorSub);
+    shootSub = new ShootSubsystem();
+    
 
     chooser = new ShuffleChooser();
     shuffleInfo();
 
     driveCmd = new DriveCommand(driveSub);
-    intakeCmd = new IntakeCommand(intakeSub);
-    elevatorCmd = new ElevatorCommand(elevatorSub);
+    shootCmd = new ShootCommand(shootSub);
     
     driveSub.setDefaultCommand(driveCmd);
-    intakeSub.setDefaultCommand(intakeCmd);
-    elevatorSub.setDefaultCommand(elevatorCmd);
+    shootSub.setDefaultCommand(shootCmd);
   }
 
   private void configureBindings() {}
 
-  public Command getAutonomousCommand() {
-    // return new AutonomousCommand(autoSub, false, "CUBE");
-    return new AutonomousCommand(autoSub, chooser.getStartLocation().getSelected(), chooser.getStartItem().getSelected());
-  }
 
   public void shuffleInfo() {
-    SmartDashboard.putData(this.chooser.getStartItem());
-    SmartDashboard.putData(this.chooser.getStartLocation());
   }
 }

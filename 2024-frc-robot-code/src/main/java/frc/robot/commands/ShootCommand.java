@@ -7,33 +7,30 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 
-public class IntakeCommand extends Command {
-  IntakeSubsystem intakeSub;
+public class ShootCommand extends Command {
+  ShootSubsystem shootSub;
   /** Creates a new IntakeCommand. */
-  public IntakeCommand(IntakeSubsystem intake) {
+  public ShootCommand(ShootSubsystem shoot) {
     // Use addRequirements() here to declare subsystem dependencies.
-    intakeSub = intake;
-    addRequirements(intakeSub);
+    shootSub = shoot;
+    addRequirements(shootSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSub.resetEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSub.pullPushIntake(RobotContainer.xboxController.getLeftTriggerAxis(),RobotContainer.xboxController.getRightTriggerAxis());
-    intakeSub.lower(-RobotContainer.xboxController.getLeftY(),false);
-    intakeSub.place(RobotContainer.xboxController.getAButton());
-    intakeSub.shoot(RobotContainer.xboxController.getBButton());
-    intakeSub.slowIn(RobotContainer.xboxController.getRightBumper());
-    // intakeSub.pidTest();
-    // intakeSub.pidTestStart(RobotContainer.xboxController.getXButton(), RobotContainer.xboxController.getYButton());
+    // shootSub.hangOut(RobotContainer.xboxController.getXButton());
+    // shootSub.reverse(RobotContainer.xboxController.getLeftBumper());
+    shootSub.shooter(RobotContainer.xboxController.getLeftBumper(),RobotContainer.xboxController.getRightBumper());
+    // shootSub.hangIn(RobotContainer.xboxController.getYButton());
+    
 
   }
 

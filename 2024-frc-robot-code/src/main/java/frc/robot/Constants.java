@@ -32,15 +32,16 @@ public final class Constants {
   public static final int CANPortR1 = 2; 
   public static final int CANPortR2 = 4; 
 
+    public static final int CANPortHang1 = 6; 
+
+
   public static final double kP = 0;
   public static final double kI = 0;
   public static final double kD = 0;
-  public static final double kEncoder2Feet = 7.3;
   
-  /* Elevator */
-  public static final int CANPortElevator = 8; //Spark
+  /*Hanger */
+  public static final int CANPortShoot1 = 8; 
+  public static final int CANPortShoot2 = 10; 
 
-  /* Intake */
-  public static final int TalonPort1 = 0; //In and Out, Talon
-  public static final int SparkPort1 = 10; //Raise and lower, Spark
+
 }
